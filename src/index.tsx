@@ -5,6 +5,10 @@ import './index.css';
 import App from './App';
 import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+import { getApiUrl } from './redux/api';
+
+axios.defaults.baseURL = getApiUrl();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
