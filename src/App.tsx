@@ -3,6 +3,7 @@ import { Routes, Route, Outlet, BrowserRouter } from "react-router-dom";
 import { ReportsPage } from './pages/ReportsPage';
 import { Header } from './components/Header';
 import { MainPage } from './pages/MainPage';
+import { Logs } from './pages/Logs';
 
 function App(): JSX.Element {
 
@@ -12,6 +13,7 @@ function App(): JSX.Element {
         <Route path="/" element={<Layout />}>
           <Route index element={<MainPage />} />
           <Route path='/reports' element={<ReportsPage />} />
+          <Route path='/logs' element={<Logs />} />
 
           {/* <Route path="/" element={<Editor />} /> */}
 

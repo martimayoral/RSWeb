@@ -20,7 +20,7 @@ interface Page {
 }
 
 
-const pages: Page[] = [{ title: 'Reports unsolved', path: '/reports' }]
+const pages: Page[] = [{ title: 'Reports unsolved', path: '/reports' }, {title: 'Logs',path: '/logs'}]
 const settings: Page[] = [{ title: 'Logout', path: '/logout' }]
 
 export function Header() {
