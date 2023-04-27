@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { Report } from "../components/Report/Report"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { reportsActions } from "../redux/reports/slice"
+import { Header } from "../components/Header"
 
 export function ReportsPage() {
     const reports = useAppSelector(state => state.reports.reports)
@@ -12,6 +13,6 @@ export function ReportsPage() {
     }, [dispatch])
 
     return <div>
-        {reports.map((r, i) => <Report report={r} key={i} />)}
+        {Object.values(reports).map((r, i) => <Report report={r} key={i} />)}
     </div>
 }

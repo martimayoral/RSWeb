@@ -1,6 +1,8 @@
 import './App.css';
 import { Routes, Route, Outlet, BrowserRouter } from "react-router-dom";
 import { ReportsPage } from './pages/ReportsPage';
+import { Header } from './components/Header';
+import { MainPage } from './pages/MainPage';
 
 function App(): JSX.Element {
 
@@ -8,7 +10,8 @@ function App(): JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<ReportsPage />} />
+          <Route index element={<MainPage />} />
+          <Route path='/reports' element={<ReportsPage />} />
 
           {/* <Route path="/" element={<Editor />} /> */}
 
@@ -26,6 +29,7 @@ export default App;
 function Layout() {
   return (
     <div className="App">
+      <Header />
       <Outlet />
     </div>
   )

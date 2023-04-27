@@ -8,15 +8,17 @@ export interface IReport {
     reportReason: string,
     solved: boolean,
     type: ReportType,
-    timesReported: number
+    timesReported: number,
+    accepted?: boolean,
+    content: string
 }
 
 export interface IReportsSlice {
-    reports: IReport[];
+    reports: { [key: string]: IReport }
 }
 
 const initialState: IReportsSlice = {
-    reports: [],
+    reports: {},
 };
 
 export const reportsSlice = createSlice({
@@ -24,9 +26,14 @@ export const reportsSlice = createSlice({
     initialState,
     reducers: {
         getReportsRequest: (state) => { },
-        setReports: (state, action: PayloadAction<IReport[]>) => {
+        setReports: (state, action: PayloadAction<{ [key: string]: IReport }>) => {
             console.log("set reports", action.payload)
             state.reports = action.payload
+        },
+        solveReport: (state, action: PayloadAction<{ accepted: boolean, reportId: string }>) => {
+            const { accepted, reportId } = action.payload
+            state.reports[reportId].solved = true
+            state.reports[reportId].accepted = accepted
         }
     },
 });
