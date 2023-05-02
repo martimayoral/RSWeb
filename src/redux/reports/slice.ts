@@ -22,7 +22,7 @@ const initialState: IReportsSlice = {
 };
 
 export const reportsSlice = createSlice({
-    name: 'counter',
+    name: 'reports',
     initialState,
     reducers: {
         getReportsRequest: (state) => { },
@@ -30,7 +30,7 @@ export const reportsSlice = createSlice({
             console.log("set reports", action.payload)
             state.reports = action.payload
         },
-        solveReport: (state, action: PayloadAction<{ accepted: boolean, reportId: string }>) => {
+        solveReport: (state, action: PayloadAction<{ accepted: boolean, reportId: string, comment: string }>) => {
             const { accepted, reportId } = action.payload
             state.reports[reportId].solved = true
             state.reports[reportId].accepted = accepted

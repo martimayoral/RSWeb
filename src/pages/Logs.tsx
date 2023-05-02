@@ -13,5 +13,5 @@ export function Logs() {
     ]
 
     // fer
-    return <div>rellenar aqui</div>
+    return <div>rellenar aqui {logs.toString()}</div>
 }

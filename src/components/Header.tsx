@@ -12,7 +12,7 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 interface Page {
     title: string,
@@ -20,8 +20,14 @@ interface Page {
 }
 
 
-const pages: Page[] = [{ title: 'Reports unsolved', path: '/reports' }, {title: 'Logs',path: '/logs'}]
-const settings: Page[] = [{ title: 'Logout', path: '/logout' }]
+const pages: Page[] = [
+    { title: 'Reports unsolved', path: '/reports' },
+    { title: 'Logs', path: '/logs' }
+]
+const settings: Page[] = [
+    { title: 'Create new user', path: '/createNewUser' },
+    { title: 'Sign Out', path: '/signOut' }
+]
 
 export function Header() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -51,7 +57,7 @@ export function Header() {
 
     const handleClickSetting = (setting: Page) => {
         console.log(setting)
-        redirect(setting.path)
+        navigate(setting.path)
         handleCloseUserMenu()
     }
 

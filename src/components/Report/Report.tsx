@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Box, Button, TextField } from "@mui/material";
 import { IReport, reportsActions } from "../../redux/reports/slice";
 import { useAppDispatch } from "../../redux/hooks";
@@ -5,8 +6,10 @@ import { useAppDispatch } from "../../redux/hooks";
 export function Report({ report }: { report: IReport }) {
     const dispatch = useAppDispatch()
 
-    const handleDeny = () => dispatch(reportsActions.solveReport({ accepted: false, reportId: report.id }))
-    const handleAccept = () => dispatch(reportsActions.solveReport({ accepted: true, reportId: report.id }))
+    const [comment, setComment] = useState("")
+
+    const handleDeny = () => dispatch(reportsActions.solveReport({ accepted: false, reportId: report.id, comment }))
+    const handleAccept = () => dispatch(reportsActions.solveReport({ accepted: true, reportId: report.id, comment }))
 
     return <Box sx={{ m: 5, pb: 2, px: 2, border: '1px dashed grey', display: "flex", flexDirection: "column" }}>
         <h2>Report</h2>
@@ -27,7 +30,7 @@ export function Report({ report }: { report: IReport }) {
         </Box>
         <br />
         <Box>
-            <TextField id="outlined-basic" label="Comment" variant="outlined" fullWidth />
+            <TextField id="outlined-basic" label="Comment" variant="outlined" fullWidth value={comment} onChange={e => setComment(e.target.value)} />
         </Box>
         <br />
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { select } from 'redux-saga/effects';
 export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export const getApiUrl = (): string => {
@@ -8,16 +9,25 @@ export const getApiUrl = (): string => {
 export function* callApi(
   method: ApiMethod,
   url: string,
-  body?: any
-): Generator<any> {
-  // console.log("API Call without auth", method, url, body)
+  body?: any,
+  auth: boolean = true
+): Generator<any, any, any> {
+
+  let headers: any = {
+    'Content-Type': 'application/json',
+    'X-Localization': 'es',
+  }
+
+  if (auth) {
+    const authToken: string = yield select(s => s.auth.token)
+    if (authToken)
+      headers['Authorization'] = "Bearer " + authToken
+  }
+
   const response = yield axios({
     url,
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Localization': 'es'
-    },
+    headers,
     ...(method === 'GET' ? { params: body } : { data: body })
   });
 
@@ -97,65 +107,65 @@ export async function callApi(method: ApiMethod, url: string, body?: any): Promi
 }
  *//* 
 export function* callApiFile(method: ApiMethod, url: string, body?: { mediaType: ArtworkMediaType, file: File }) {
-  try {
-    const token: string = yield getAuthToken()
+try {
+const token: string = yield getAuthToken()
 
-    if (!token) {
-      return {
-        data: {
-          error: true,
-          error_code: 'token_not_exist'
-        }
-      };
-    }
+if (!token) {
+return {
+data: {
+error: true,
+error_code: 'token_not_exist'
+}
+};
+}
 
-    if (!body) {
-      return {
-        data: {
-          error: true,
-          error_code: 'no_file_provided'
-        }
-      }
-    }
-    const data = new FormData()
-    const type = body.mediaType === "IMAGE" ? 'photo' : body.mediaType === "SCULPTURE" ? 'sculpture' : 'video'
-    data.append(type, body.file)
+if (!body) {
+return {
+data: {
+error: true,
+error_code: 'no_file_provided'
+}
+}
+}
+const data = new FormData()
+const type = body.mediaType === "IMAGE" ? 'photo' : body.mediaType === "SCULPTURE" ? 'sculpture' : 'video'
+data.append(type, body.file)
 
-    // console.log("callApi file", data, body)
+// console.log("callApi file", data, body)
 
-    const response: AxiosResponse = yield axios({
-      url: url,
-      method: method,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'X-Localization': 'es',
-        ...(token ? { Authorization: `Bearer ${token}` } : {})
-      },
-      data
-    })
+const response: AxiosResponse = yield axios({
+url: url,
+method: method,
+headers: {
+'Content-Type': 'multipart/form-data',
+'X-Localization': 'es',
+...(token ? { Authorization: `Bearer ${token}` } : {})
+},
+data
+})
 
-    // console.log("callApi file response", response)
+// console.log("callApi file response", response)
 
-    return response;
+return response;
 
-  } catch (error: any) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      return error.response;
-    }
-    return error;
-  }
+} catch (error: any) {
+if (error.response) {
+// The request was made and the server responded with a status code
+// that falls out of the range of 2xx
+return error.response;
+}
+return error;
+}
 }
 
 export const isTokenExpired = (code: string) => {
-  return code === 'expired_token';
+return code === 'expired_token';
 };
 
 export const isTokenInvalid = (code: string) => {
-  return code === 'invalid_token';
+return code === 'invalid_token';
 };
 
 export const needsLogin = (code: string) => {
-  return code === 'token_not_exist';
+return code === 'token_not_exist';
 }; */

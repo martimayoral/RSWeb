@@ -6,6 +6,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 
 function mapReports(report: any): { [key: string]: IReport } {
+  // console.log(report)
   return Object.fromEntries(report.map((r: any) => {
     const Report: IReport = {
       id: r.id,
@@ -20,7 +21,7 @@ function mapReports(report: any): { [key: string]: IReport } {
   }))
 }
 
-export function* watchGetReports(): Generator<any, void, never> {
+function* watchGetReports(): Generator<any, void, never> {
   try {
     const reports: AxiosResponse = yield call(callApi, 'GET', `/allReportsUnsolved`)
 
@@ -31,17 +32,16 @@ export function* watchGetReports(): Generator<any, void, never> {
   }
 }
 
-export function* watchSolveReport(
-  action: PayloadAction<{ accepted: boolean, reportId: string }>
+function* watchSolveReport(
+  action: PayloadAction<{ accepted: boolean, reportId: string, comment: string }>
 ): Generator<any, void, never> {
   try {
-    console.log("wsr")
-    const { accepted, reportId } = action.payload
+    const { accepted, reportId, comment } = action.payload
 
     yield call(callApi, 'POST', `/solveReport`,
       {
         "id": reportId,
-        "comment": "perque se soluciona",
+        "comment": comment,
         "idMod": "1",
         "acceptReport": accepted
       })
