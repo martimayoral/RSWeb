@@ -32,7 +32,10 @@ export function* callApi(
   });
 
   return response;
-}/* 
+}
+
+
+/* 
 
 export function* callApi(
   method: ApiMethod,

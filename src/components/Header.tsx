@@ -13,25 +13,29 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import { useNavigate } from 'react-router-dom'
+import { LicencePermision } from '../assets/global'
+import { useAppSelector } from '../redux/hooks'
 
 interface Page {
     title: string,
-    path: string
+    path: string,
+    permision?: keyof LicencePermision
 }
 
 
 const pages: Page[] = [
-    { title: 'Reports unsolved', path: '/reports' },
-    { title: 'Logs', path: '/logs' }
+    { title: 'Reports unsolved', path: '/reports', permision: 'solveReports' },
+    { title: 'Logs', path: '/logs', permision: 'logOverview' }
 ]
 const settings: Page[] = [
-    { title: 'Create new user', path: '/createNewUser' },
+    { title: 'Create new user', path: '/createNewUser', permision: 'createNewMod' },
     { title: 'Sign Out', path: '/signOut' }
 ]
 
 export function Header() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+    const currentLicence = useAppSelector(s => s.auth.licencePermisions)
     const navigate = useNavigate()
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -114,11 +118,14 @@ export function Header() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page.title} onClick={() => handleClickPage(page)}>
-                                    <Typography textAlign="center">{page.title}</Typography>
-                                </MenuItem>
-                            ))}
+                            {pages
+                                .filter(page => page.permision === undefined || (currentLicence && currentLicence[page.permision]))
+                                .map((page) => (
+                                    <MenuItem key={page.title} onClick={() => handleClickPage(page)}>
+                                        <Typography textAlign="center">{page.title}</Typography>
+                                    </MenuItem>
+                                ))
+                            }
                         </Menu>
                     </Box>
 
@@ -143,15 +150,17 @@ export function Header() {
                         ADMIN
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page.title}
-                                onClick={() => handleClickPage(page)}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page.title}
-                            </Button>
-                        ))}
+                        {pages
+                            .filter(page => page.permision === undefined || (currentLicence && currentLicence[page.permision]))
+                            .map((page) => (
+                                <Button
+                                    key={page.title}
+                                    onClick={() => handleClickPage(page)}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    {page.title}
+                                </Button>
+                            ))}
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>

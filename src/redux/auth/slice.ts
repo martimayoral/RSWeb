@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import { LicencePermision } from '../../assets/global';
 
 export type AuthStatus = "auth_error" | "auth_success" | "auth_pending" | "no_auth" | "loading"
 
@@ -8,13 +9,13 @@ export interface IAuthSlice {
     authStatus: AuthStatus,
     userId: string | undefined,
     token: string | undefined,
-    range: number
+    licencePermisions: LicencePermision | undefined
 }
 
 const initialState: IAuthSlice = {
     username: undefined,
     userId: undefined,
-    range: 0,
+    licencePermisions: undefined,
     authStatus: "loading",
     token: Cookies.get("auth")
 }
@@ -30,7 +31,7 @@ export const authSlice = createSlice({
             if (action.payload === "no_auth") {
                 state.userId = undefined
                 state.username = undefined
-                state.range = 0
+                state.licencePermisions = undefined
             }
         },
         authFromToken: () => { },
@@ -40,8 +41,8 @@ export const authSlice = createSlice({
         setUserId: (state, action: PayloadAction<string>) => {
             state.userId = action.payload
         },
-        setRange: (state, action: PayloadAction<number>) => {
-            state.range = action.payload
+        setLicencePermisions: (state, action: PayloadAction<LicencePermision>) => {
+            state.licencePermisions = action.payload
         },
         setUserName: (state, action: PayloadAction<string>) => {
             state.username = action.payload

@@ -1,17 +1,23 @@
-import { useRef, useContext, createContext, useState } from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import SelectModRange from '../components/SelectModRange';
+import axios from 'axios';
+import { useAppSelector } from '../redux/hooks';
+import { lincencePermisions } from '../assets/global';
+
+type CreateModStatus = "OK" | "ERROR" | "CREATING" | null
 
 export function CreateNewUser() {
+    const auth = useAppSelector((s) => s.auth.token)
+    const [selectedModRange, setSelectedModRange] = useState(0)
+    const [createModStatus, setCreateModStatus] = useState<CreateModStatus>()
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -19,8 +25,23 @@ export function CreateNewUser() {
             firstName: data.get('firstName'),
             password: data.get('password'),
         });
+
+        setCreateModStatus("CREATING")
+        axios.post("/createMod", {
+            "username": data.get('firstName'),
+            "password": data.get('password'),
+            "modRange": lincencePermisions[selectedModRange].range,
+            "salt": "saltsaltsaltsalt"
+        }, {
+            headers: {
+                "Authorization": "Bearer " + auth,
+                'Content-Type': 'application/json',
+                'X-Localization': 'es',
+            }
+        })
+            .then((v) => (v && v.data >= 0) ? setCreateModStatus("OK") : setCreateModStatus("ERROR"))
+            .catch(() => { setCreateModStatus("ERROR") })
     };
-    const [selectedModRange, setSelectedModRange] = useState(0)
 
     // nom
     // rango
@@ -53,6 +74,8 @@ export function CreateNewUser() {
                         fullWidth
                         id="firstName"
                         label="First Name"
+                        error={createModStatus === "ERROR"}
+                        aria-errormessage='afasodf'
                     />
                     <TextField
                         margin='normal'
@@ -119,17 +142,39 @@ export function CreateNewUser() {
                             />
                         </Grid>
                     </Grid> */}
+                    {
+                        (createModStatus === "OK") ?
+                            (
+                                <Box sx={{ display: 'flex', my: 3 }}>
+                                    <Typography
+                                        p={1}
+                                        color={"success.main"}
+                                    >
+                                        Created succesfully!
+                                    </Typography>
 
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Create!
-                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{ ml: "auto" }}
+                                        onClick={() => setCreateModStatus(null)}
+                                    >
+                                        Create another!
+                                    </Button>
+                                </Box>
+                            ) :
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ my: 3 }}
+                                disabled={createModStatus === "CREATING"}
+                            >
+                                Create!
+                            </Button>
+                    }
+
                 </Box>
             </Box>
-        </Container>
+        </Container >
     );
 }

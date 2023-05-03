@@ -4,6 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { authActions } from './slice';
 import { sha256 } from 'js-sha256';
 import Cookies from 'js-cookie';
+import { lincencePermisions } from '../../assets/global';
 
 function* watchLogInRequest(
   action: PayloadAction<{ username: string, password: string }>
@@ -57,7 +58,6 @@ function* watchAuthFromToken(): Generator<any, void, any> {
     const infoMod = yield call(callApi, 'GET', `/modInfo`)
 
     const { id, modRange, name } = infoMod?.data
-
     if (!infoMod?.data?.id) {
       yield put(authActions.setAuthStatus("no_auth"))
       return
@@ -70,7 +70,19 @@ function* watchAuthFromToken(): Generator<any, void, any> {
     yield put(authActions.setAuthStatus("auth_success"))
     yield put(authActions.setUserId(id))
     yield put(authActions.setUserName(name))
-    yield put(authActions.setRange(modRange))
+
+    const sortedPermisions = lincencePermisions.sort((a, b) => a.range - b.range)
+
+    var i
+    for (i = 1; i < sortedPermisions.length; i++) {
+      const element = sortedPermisions[i]
+      if (element.range > modRange)
+        break
+    }
+    i--
+
+    // console.log("sortedPermisions", sortedPermisions, modRange, sortedPermisions[i])
+    yield put(authActions.setLicencePermisions(sortedPermisions[i]))
 
 
   } catch (e) {
