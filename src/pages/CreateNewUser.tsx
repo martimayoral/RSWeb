@@ -15,6 +15,7 @@ type CreateModStatus = "OK" | "ERROR" | "CREATING" | null
 
 export function CreateNewUser() {
     const auth = useAppSelector((s) => s.auth.token)
+    const licenceRange = useAppSelector((s) => s.auth.licencePermisions?.range)
     const [selectedModRange, setSelectedModRange] = useState(0)
     const [createModStatus, setCreateModStatus] = useState<CreateModStatus>()
 
@@ -32,12 +33,6 @@ export function CreateNewUser() {
             "password": data.get('password'),
             "modRange": lincencePermisions[selectedModRange].range,
             "salt": "saltsaltsaltsalt"
-        }, {
-            headers: {
-                "Authorization": "Bearer " + auth,
-                'Content-Type': 'application/json',
-                'X-Localization': 'es',
-            }
         })
             .then((v) => (v && v.data >= 0) ? setCreateModStatus("OK") : setCreateModStatus("ERROR"))
             .catch(() => { setCreateModStatus("ERROR") })
@@ -91,7 +86,7 @@ export function CreateNewUser() {
                     >
                         Range
                     </Typography>
-                    <SelectModRange selected={selectedModRange} setSelected={setSelectedModRange} />
+                    <SelectModRange maxRange={licenceRange || 0} selected={selectedModRange} setSelected={setSelectedModRange} />
                     {/* 
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>

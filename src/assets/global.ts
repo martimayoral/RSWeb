@@ -12,6 +12,7 @@ export const lincencePermisions: LicencePermision[] = [
     {
         name: "Moderator",
         range: 10,
+        logOverview: true,
         solveReports: true
     },
     {

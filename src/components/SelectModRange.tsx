@@ -90,7 +90,7 @@ function Head() {
     )
 }
 
-export default function SelectModRange({ selected, setSelected }: { selected: number, setSelected: React.Dispatch<React.SetStateAction<number>> }) {
+export default function SelectModRange({ selected, setSelected, maxRange }: { selected: number, setSelected: React.Dispatch<React.SetStateAction<number>>, maxRange: number }) {
     const [colHover, setColHover] = useState(0)
 
     return (

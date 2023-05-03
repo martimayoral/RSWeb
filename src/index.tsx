@@ -9,15 +9,17 @@ import axios from 'axios';
 import { getApiUrl } from './redux/api';
 
 axios.defaults.baseURL = getApiUrl();
+axios.defaults.headers["Content-Type"] = "application/json"
+axios.defaults.headers["X-Localization"] = "es"
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
   // </React.StrictMode>
 );
 

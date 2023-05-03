@@ -5,6 +5,7 @@ import { authActions } from './slice';
 import { sha256 } from 'js-sha256';
 import Cookies from 'js-cookie';
 import { lincencePermisions } from '../../assets/global';
+import axios from 'axios';
 
 function* watchLogInRequest(
   action: PayloadAction<{ username: string, password: string }>
@@ -45,6 +46,8 @@ function* watchLogInRequest(
     yield put(authActions.setAuthStatus("auth_success"))
     yield put(authActions.setAuthToken(login.data.token))
     yield put(authActions.authFromToken())
+    
+    axios.defaults.headers.common['Authorization'] = "Bearer " + login.data.token
 
   } catch (error) {
     console.error("error caught", error)
