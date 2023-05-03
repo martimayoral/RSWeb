@@ -13,5 +13,5 @@ export function Logs() {
     ]
 
     // fer
-    return <div>rellenar aqui {logs.map((log)=>log.user+" ")}</div>
+    return <div>rellenar aqui {logs.map((log)=>log.user+".")}</div>
 }
