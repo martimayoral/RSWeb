@@ -7,6 +7,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 function mapReports(report: any): { [key: string]: IReport } {
   // console.log(report)
+  console.log(report)
   return Object.fromEntries(report.map((r: any) => {
     const Report: IReport = {
       id: r.id,
@@ -23,7 +24,7 @@ function mapReports(report: any): { [key: string]: IReport } {
 
 function* watchGetReports(): Generator<any, void, never> {
   try {
-    const reports: AxiosResponse = yield call(callApi, 'GET', `/allReportsUnsolved`)
+    const reports: AxiosResponse = yield call(callApi, 'GET', `/allReportsUnsolved`, { limit: 50 })
 
     yield put(reportsActions.setReports(mapReports(reports.data)));
   } catch (error) {
@@ -33,18 +34,18 @@ function* watchGetReports(): Generator<any, void, never> {
 }
 
 function* watchSolveReport(
-  action: PayloadAction<{ accepted: boolean, reportId: string, comment: string }>
+  action: PayloadAction<{ status: number, reportId: string, comment: string }>
 ): Generator<any, void, never> {
   try {
-    const { accepted, reportId, comment } = action.payload
-
-    yield call(callApi, 'POST', `/solveReport`,
-      {
-        "id": reportId,
-        "comment": comment,
-        "idMod": "1",
-        "acceptReport": accepted
-      })
+    const { status, reportId, comment } = action.payload
+    /* 
+        yield call(callApi, 'POST', `/solveReport`,
+          {
+            "id": reportId,
+            "comment": comment,
+            "idMod": "1",
+            "status": status
+          }) */
 
   } catch (error) {
     console.error(error)

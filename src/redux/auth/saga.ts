@@ -46,7 +46,7 @@ function* watchLogInRequest(
     yield put(authActions.setAuthStatus("auth_success"))
     yield put(authActions.setAuthToken(login.data.token))
     yield put(authActions.authFromToken())
-    
+
     axios.defaults.headers.common['Authorization'] = "Bearer " + login.data.token
 
   } catch (error) {

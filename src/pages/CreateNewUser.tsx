@@ -14,7 +14,7 @@ import { lincencePermisions } from '../assets/global';
 type CreateModStatus = "OK" | "ERROR" | "CREATING" | null
 
 export function CreateNewUser() {
-    const auth = useAppSelector((s) => s.auth.token)
+    // const auth = useAppSelector((s) => s.auth.token)
     const licenceRange = useAppSelector((s) => s.auth.licencePermisions?.range)
     const [selectedModRange, setSelectedModRange] = useState(0)
     const [createModStatus, setCreateModStatus] = useState<CreateModStatus>()

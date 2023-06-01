@@ -9,7 +9,7 @@ export interface IReport {
     solved: boolean,
     type: ReportType,
     timesReported: number,
-    accepted?: boolean,
+    status?: number,
     content: string
 }
 
@@ -30,10 +30,10 @@ export const reportsSlice = createSlice({
             console.log("set reports", action.payload)
             state.reports = action.payload
         },
-        solveReport: (state, action: PayloadAction<{ accepted: boolean, reportId: string, comment: string }>) => {
-            const { accepted, reportId } = action.payload
+        solveReport: (state, action: PayloadAction<{ status: number, reportId: string, comment: string }>) => {
+            const { status, reportId } = action.payload
             state.reports[reportId].solved = true
-            state.reports[reportId].accepted = accepted
+            state.reports[reportId].status = status
         }
     },
 });
