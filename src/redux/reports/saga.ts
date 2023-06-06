@@ -10,15 +10,15 @@ function mapReports(report: any): { [key: string]: IReport } {
   console.log(report)
   return Object.fromEntries(report.map((r: any) => {
     const Report: IReport = {
-      id: r.id,
-      dateReported: r.dateReported,
-      reportReason: r.reason,
-      solved: r.solved === 1,
-      type: r.type,
+      id: r.Id,
+      dateReported: r.DateReported,
+      reportReason: r.Reason,
+      solved: r.Solved === 1,
+      type: r.Type,
       timesReported: r.totalReports,
-      content: r.content
+      content: r.Content
     }
-    return [r.id, Report]
+    return [r.Id, Report]
   }))
 }
 
